@@ -1,5 +1,5 @@
-# Building-Scalable-Internet-based-Services 
-The project aims to build up a scalable online personal album service which supports functions like user login, uploading/deleting photos, and searching photos by keywords.
-1. The service also embeds recommendation system and email digest system in order to receive instant feedback from users.
-2. The service is built up in python Flask framework and uses Nginx as web server and load balancer
-3. To increase the probability of successful request the scalability problem is addressed and well solved by using Redit cache,  RabbitMQ and WebSocket.
+#Large-scale Online Application Design (Python, Flask, JavaScript)}
+1. Developed a large-scale web application (Javascript, Python, SQL) that provides an online album service.
+2. Introduced basic uploading/deleting/searching functions as well as a recommendation system and an email digest system, with Angular as frontend framework and Flask as backend server. 
+3. Applied Asynchronous Message Queues (Celery, RabbitMQ, Redis) techniques as well as load balancer (Nginx) to improve the scalability and efficiency.
+4. Conducted performance test (Funkload) to understand the responsiveness of the system under certain conditions.
