@@ -65,7 +65,7 @@ def update_friend(username,friend_name):
 @app.route('/app/friend_search',methods=['GET','POST'])
 def friend_search():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	username = session['username']
 	flag = 0
@@ -89,7 +89,7 @@ def friend_search():
 @app.route('/app/friend_portfolio')
 def show_friend_portfolio():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	username = session['username']
 	f = {}
@@ -156,8 +156,8 @@ def static_images(fname):
 @app.route('/')
 def index():
 	if 'username' in session:
-		return redirect("http://54.186.189.42/app/portfolio")
-	return redirect("http://54.186.189.42/html/index.html")
+		return redirect("http://54.218.75.224/app/portfolio")
+	return redirect("http://54.218.75.224/templates/index.html")
 
 @app.route('/app/sign_up',methods=['GET','POST'])
 def sign_up():
@@ -169,14 +169,14 @@ def sign_up():
 		confirm_password = request.form.get('confirm_password',default='')
 	
 		if confirm_password != password:
-			return redirect("http://54.186.189.42/html/pages-re-sign-up.html")
+			return redirect("http://54.218.75.224/html/pages-re-sign-up.html")
 		db = MySQLdb.connect('localhost','root','root','ierg4080')
 		cursor = db.cursor()
 		sql1 = 'SELECT username from login WHERE username = "%s"'%username
 		cursor.execute(sql1)
 		row = cursor.fetchone()
 		if row != None:
-			return redirect("http://54.186.189.42/html/pages-re-sign-up.html")	  
+			return redirect("http://54.218.75.224/html/pages-re-sign-up.html")	  
 		
 		sql2 = 'INSERT INTO login (username,password,firstname,lastname) VALUES ("%s","%s","%s","%s")'%(username,password,firstname,lastname)
 		try:
@@ -186,8 +186,8 @@ def sign_up():
 			db.rollback()
         	db.close()
 		
-		return redirect("http://54.186.189.42/app/login")
-	return redirect("http://54.186.189.42/html/pages-sign-up.html")	  
+		return redirect("http://54.218.75.224/app/login")
+	return redirect("http://54.218.75.224/html/pages-sign-up.html")	  
 
 @app.route('/app/login', methods=['GET', 'POST'])
 def login():
@@ -201,24 +201,24 @@ def login():
 		row = cursor.fetchone()
 		db.close()
 		if row == None:
-			return redirect("http://54.186.189.42/html/pages-re-login.html")
+			return redirect("http://54.218.75.224/html/pages-re-login.html")
 
 		session['username'] = username   	
-		return redirect('http://54.186.189.42/')
-	return redirect("http://54.186.189.42/html/pages-login.html")	  
+		return redirect('http://54.218.75.224/')
+	return redirect("http://54.218.75.224/html/pages-login.html")	  
 
 @app.route('/app/logout')
 def logout():
     	# remove the username from the session if it's there
     	session.pop('username', None)
-    	return redirect('http://54.186.189.42/html/index.html')
+    	return redirect('http://54.218.75.224/html/index.html')
 
 app.secret_key = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 
 @app.route('/app/portfolio')
 def show_portfolio():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	username = session['username']
 	#return username
@@ -236,7 +236,7 @@ def show_portfolio():
                 user_id = str(user_id[0])
 	
 		if user_id == None:
-                        return redirect("http://54.186.189.42/html/index.html")
+                        return redirect("http://54.218.75.224/html/index.html")
 		sql2 = 'SELECT id,img_name,title,description FROM portfolio WHERE user_id = "%s" ORDER BY submited_at DESC'%user_id
 		cursor.execute(sql2)
 		imgdatas = cursor.fetchall()
@@ -258,7 +258,7 @@ def allowed_file(filename):
 @app.route('/app/upload', methods=['GET','POST'])
 def upload():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	username = session['username']
 	if request.method == 'POST':
@@ -285,7 +285,7 @@ def upload():
 		user_id = cursor.fetchone()
 		user_id = str(user_id[0])
 		if user_id == None:
-			return  redirect("http://54.186.189.42/html/index.html")		
+			return  redirect("http://54.218.75.224/html/index.html")		
 		
 		sql2 = 'INSERT INTO portfolio (user_id,img_name,title,description,submited_at) VALUES ("%s","%s","%s","%s","%s")'%(user_id,file_path,title,description,datetime.now())
 		try:
@@ -293,7 +293,7 @@ def upload():
         	        db.commit()
         	except:
         	        db.rollback()
-			return  redirect("http://54.186.189.42/app/portfolio")		
+			return  redirect("http://54.218.75.224/app/portfolio")		
         	        
 		sql3 = 'SELECT id from portfolio where img_name = "%s"'%file_path
 		cursor.execute(sql3)
@@ -305,7 +305,7 @@ def upload():
 			db.commit()
 		except:
 			db.rollback()
-			return  redirect("http://54.186.189.42/app/portfolio")		
+			return  redirect("http://54.218.75.224/app/portfolio")		
 		
 		sql4 = 'SELECT id,img_name,title,description FROM portfolio WHERE user_id = "%s" ORDER BY submited_at DESC'%user_id
         	cursor.execute(sql4)
@@ -322,13 +322,13 @@ def upload():
 		#return jsonify(imgs)
 		redis_db = redis.StrictRedis(host='localhost',port=6379,db=0)
 		redis_db.set(username,imgs)
-		return  redirect("http://54.186.189.42/app/portfolio")		
-	return redirect("http://54.186.189.42/html/pages-upload.html")
+		return  redirect("http://54.218.75.224/app/portfolio")		
+	return redirect("http://54.218.75.224/html/pages-upload.html")
 
 @app.route('/app/search', methods=['GET','POST'])
 def search():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	username = session['username']
 	di = list()
@@ -343,7 +343,7 @@ def search():
 		user_id = cursor.fetchone()
 		user_id = str(user_id[0])
 		if user_id == None:
-			return redirect("http://54.186.189.42/html/index.html")
+			return redirect("http://54.218.75.224/html/index.html")
 		
 		sql2 = 'SELECT keyword FROM img_title_index WHERE user_id = "%s"'%user_id
 		cursor.execute(sql2)
@@ -365,7 +365,7 @@ def search():
 @app.route('/app/delete',methods=['GET','POST'])
 def delete():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 	
 	if request.method == 'GET':
 		username = session['username']
@@ -378,7 +378,7 @@ def delete():
 		user_id = cursor.fetchone()
 		user_id = str(user_id[0])
 		if user_id == None:
-			return redirect("http://54.186.189.42/html/index.html")
+			return redirect("http://54.218.75.224/html/index.html")
 				
         	sql2 = 'SELECT id FROM portfolio WHERE img_name = "%s"'%file_path
 		cursor.execute(sql2)
@@ -391,7 +391,7 @@ def delete():
                 	db.commit()
         	except:
                 	db.rollback()
-			return redirect("http://54.186.189.42/app/portfolio")
+			return redirect("http://54.218.75.224/app/portfolio")
         
 		sql4 = 'DELETE FROM img_title_index WHERE img_id = "%s"'%img_id
 		try:
@@ -399,7 +399,7 @@ def delete():
                 	db.commit()
        		except:
                 	db.rollback()
-			return redirect("http://54.186.189.42/app/portfolio")
+			return redirect("http://54.218.75.224/app/portfolio")
 		
 		if os.path.exists(file_path):
 			os.remove(file_path)	
@@ -422,12 +422,12 @@ def delete():
         	if (redis_data):
 			redis_db.delete(username)
 		redis_db.set(username,imgs)
-	return  redirect("http://54.186.189.42/app/portfolio")		
+	return  redirect("http://54.218.75.224/app/portfolio")		
 
 @app.route('/app/delete_friend',methods=['POST','GET'])
 def delete_friend():
  	if 'username' not in session:
-                return redirect("http://54.186.189.42/html/index.html")
+                return redirect("http://54.218.75.224/html/index.html")
 
 	username = session['username']
 	if request.method == 'POST':
@@ -451,7 +451,7 @@ def delete_friend():
 			db.commit()
 		except:
 			db.rollback()
-	return redirect("http://54.186.189.42/app/friend_portfolio")
+	return redirect("http://54.218.75.224/app/friend_portfolio")
 
 if __name__ == '__main__':
 	app.run(host='0.0.0.0')
